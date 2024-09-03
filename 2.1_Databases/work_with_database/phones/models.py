@@ -12,3 +12,10 @@ class Phone(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.price}"
+
+    class Meta:
+        ordering = ['-release_date']
+        indexes = [
+            models.Index(fields=['-release_date']),
+            models.Index(fields=['name'])
+        ]

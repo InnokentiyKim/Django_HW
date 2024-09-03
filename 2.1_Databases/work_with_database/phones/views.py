@@ -9,13 +9,14 @@ def index(request):
 def show_catalog(request):
     template = 'catalog.html'
     sort = request.GET.get('sort')
-    phones = [phone for phone in Phone.objects.all()]
     if sort == 'name':
-        phones = sorted(phones, key=lambda phone: phone.name)
+        phones = [phone for phone in Phone.objects.all().order_by('name')]
     elif sort == 'min_price':
-        phones = sorted(phones, key=lambda phone: phone.price)
+        phones = [phone for phone in Phone.objects.all().order_by('price')]
     elif sort == 'max_price':
-        phones = sorted(phones, key=lambda phone: phone.price, reverse=True)
+        phones = [phone for phone in Phone.objects.all().order_by('-price')]
+    else:
+        phones = [phone for phone in Phone.objects.all()]
     context = {'phones': phones}
     return render(request, template, context)
 
