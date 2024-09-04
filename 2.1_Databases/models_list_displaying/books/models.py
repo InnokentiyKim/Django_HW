@@ -13,7 +13,7 @@ class Book(models.Model):
 
     class Meta:
         verbose_name = u'Книга'
-        ordering = ['-pub_date']
+        ordering = ['pub_date']
         indexes = [
             models.Index(fields=['pub_date']),
         ]

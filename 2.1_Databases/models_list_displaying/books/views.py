@@ -1,8 +1,7 @@
 from django.core.paginator import Paginator
-from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from books.models import Book
-from main.settings import CONTENT_ON_PAGE
+from datetime import date
 
 
 def books_view(request):
@@ -14,18 +13,42 @@ def books_view(request):
 def index_view(request):
     return redirect('books')
 
+
+class PageSlugByDate:
+    def __init__(self, books_pub_date_seq: list[date], book_pub_date: date):
+        self.size = len(books_pub_date_seq)
+        self.books_pub_date_seq = books_pub_date_seq
+        self.book_pub_date = book_pub_date
+        self.current_ind = books_pub_date_seq.index(book_pub_date)
+
+    def has_previous(self):
+        return self.current_ind > 0
+
+    def has_next(self):
+        return self.current_ind < self.size - 1
+
+    def get_previous_page_slug(self):
+        if self.has_previous():
+            return self.books_pub_date_seq[self.current_ind - 1]
+        else:
+            return self.book_pub_date
+
+    def get_next_page_slug(self):
+        if self.has_next():
+            return self.books_pub_date_seq[self.current_ind + 1]
+        else:
+            return self.book_pub_date
+
+    def sort_by_date(self, reverse: bool = False):
+        self.books_pub_date_seq.sort(reverse=reverse)
+        self.current_ind = self.books_pub_date_seq.index(self.book_pub_date)
+
+
 def books_pub_date_view(request, pub_date):
     template = 'books/book.html'
+    book = get_object_or_404(Book, pub_date=pub_date)
     books_list = [book for book in Book.objects.all().order_by('pub_date')]
-    requested_page_num = None
-    pages_pub_date_list = []
-    for i, book in enumerate(books_list, start=1):
-        pages_pub_date_list.append(book.pub_date)
-        if book.pub_date == pub_date:
-            requested_page_num = i
-    if not requested_page_num:
-        raise Http404
-    paginator = Paginator(books_list, CONTENT_ON_PAGE)
-    page = paginator.get_page(requested_page_num)
-    context = {'book': books_list[requested_page_num - 1],'page': page, 'pages_list': pages_pub_date_list}
+    books_pub_date_seq = [book.pub_date for book in books_list]
+    pages_by_date = PageSlugByDate(books_pub_date_seq, book.pub_date)
+    context = {'book': book, 'pages_by_date': pages_by_date}
     return render(request, template, context)

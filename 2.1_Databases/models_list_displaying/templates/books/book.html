@@ -13,13 +13,16 @@
                 <p>Автор: {{ book.author }}</p>
                 <p>Дата публикации: {{ book.pub_date|date:'Y-m-d' }}</p>
             </div>
-        {% if page.has_previous %}
-        <a href="{% url page.previous_page %}">< {{ page_list.page.previous_page_number }}</a>
-        {% endif %}
-        <a class="button disabled" href="">{{ page.number }}</a>
-        {% if page.has_next %}
-            <a href="{{ page.next_page_number }}">⟶</a>
-        {% endif %}
         </div>
+    <br>
+    <hr>
+    <p>
+    {% if pages_by_date.has_previous %}
+        <a href="{% url 'books_pub_date' pages_by_date.get_previous_page_slug %}">< {{ pages_by_date.get_previous_page_slug|date:'Y-m-d' }}</a> |
+    {% endif %}
+    {% if pages_by_date.has_next %}
+        <a href="{% url 'books_pub_date' pages_by_date.get_next_page_slug %}">{{ pages_by_date.get_next_page_slug|date:'Y-m-d' }} ></a>
+    {% endif %}
+    </p>
     </div>
 {% endblock %}

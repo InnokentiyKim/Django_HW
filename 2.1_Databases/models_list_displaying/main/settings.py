@@ -120,4 +120,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-CONTENT_ON_PAGE = 1
+__SINGLE_PAGE_CONTENT = 1
