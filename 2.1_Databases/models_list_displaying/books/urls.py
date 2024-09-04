@@ -5,6 +5,7 @@ from . import converters
 register_converter(converters.DateConverter, 'pub_date')
 
 urlpatterns = [
-    path('', views.books_view, name='books'),
-    path('<pub_date:pub_date>', views.books_pub_date_view, name='books_pub_date'),
+    path('books/', views.books_view, name='books'),
+    path('', views.index_view, name='index'),
+    path('books/<pub_date:pub_date>', views.books_pub_date_view, name='books_pub_date'),
 ]

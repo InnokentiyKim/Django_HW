@@ -10,3 +10,10 @@ class Book(models.Model):
 
     def __str__(self):
         return self.name + " " + self.author
+
+    class Meta:
+        verbose_name = u'Книга'
+        ordering = ['-pub_date']
+        indexes = [
+            models.Index(fields=['pub_date']),
+        ]

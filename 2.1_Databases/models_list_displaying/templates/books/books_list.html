@@ -10,9 +10,9 @@
         <div class="row">
             {% for book in books %}
             <div class="book col-md-4">
-                <h2><a href="/books/{{ book.pub_date }}">{{ book.name }}</a></h2>
+                <h2><a href="{% url 'books_pub_date' book.pub_date %}">{{ book.name }}</a></h2>
                 <p>Автор: {{ book.author }}</p>
-                <p>Дата публикации: {{ book.pub_date }}</p>
+                <p>Дата публикации: {{ book.pub_date|date:'Y-m-d' }}</p>
             </div>
             {% endfor %}
         </div>

@@ -11,7 +11,7 @@
             <div class="book col-md-4">
                 <h2>{{ book.name }}</h2>
                 <p>Автор: {{ book.author }}</p>
-                <p>Дата публикации: {{ book.pub_date }}</p>
+                <p>Дата публикации: {{ book.pub_date|date:'Y-m-d' }}</p>
             </div>
         </div>
     </div>
