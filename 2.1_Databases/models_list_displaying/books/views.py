@@ -6,7 +6,7 @@ from datetime import datetime
 
 def books_view(request):
     template = 'books/books_list.html'
-    books = [book for book in Book.objects.all()]
+    books = Book.objects.all()
     context = {'books': books}
     return render(request, template, context)
 
@@ -46,9 +46,8 @@ class PageSlugByDate:
 
 def books_pub_date_view(request, pub_date):
     template = 'books/book.html'
-    books = [book for book in Book.objects.all().filter(pub_date=pub_date)]
-    pub_dates_set = {book.pub_date for book in Book.objects.all()}
-    books_pub_date_seq = list(pub_dates_set)
+    books = Book.objects.all().filter(pub_date=pub_date)
+    books_pub_date_seq = list({book.pub_date for book in Book.objects.all()})
     pages_by_date = PageSlugByDate(books_pub_date_seq, pub_date)
     pages_by_date.sort_by_date()
     context = {'books': books, 'pages_by_date': pages_by_date}
