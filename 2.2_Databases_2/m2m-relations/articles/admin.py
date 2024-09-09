@@ -6,9 +6,14 @@ from .models import Article, Tag, Scope
 
 class RelationshipInlineFormset(BaseInlineFormSet):
     def clean(self):
+        main_tags = 0
         for form in self.forms:
-            if form.cleaned_data.get('is_main') is None:
-                raise ValidationError('Тут всегда ошибка')
+            if form.cleaned_data.get('is_main'):
+                main_tags += 1
+        if main_tags == 0:
+            raise ValidationError('Один из тегов должен быть основным')
+        elif main_tags > 1:
+            raise ValidationError('Основной тег может быть только один')
         return super().clean()
 
 
@@ -28,4 +33,3 @@ class ArticleAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('title', )
-    inlines = (ScopeInline, )
