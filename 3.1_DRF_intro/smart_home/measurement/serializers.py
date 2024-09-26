@@ -8,8 +8,6 @@ class SensorSerializer(serializers.Serializer):
 
 
 class MeasurementSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    sensor = serializers.ModelSerializer(SensorSerializer, many=False)
+    sensor = serializers.IntegerField()
     temperature = serializers.FloatField()
-    measured_at = serializers.DateTimeField()
 
