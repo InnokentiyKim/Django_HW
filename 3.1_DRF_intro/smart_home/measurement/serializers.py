@@ -27,4 +27,3 @@ class SensorDetailSerializer(serializers.ModelSerializer):
         model = Sensor
         fields = ['id', 'name', 'description', 'measurements']
         required_fields = ['name', 'description']
-
