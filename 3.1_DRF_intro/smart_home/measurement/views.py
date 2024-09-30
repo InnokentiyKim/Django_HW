@@ -1,43 +1,41 @@
 # TODO: опишите необходимые обработчики, рекомендуется использовать generics APIView классы:
 # TODO: ListCreateAPIView, RetrieveUpdateAPIView, CreateAPIView
+from django.core.serializers import serialize
+from django.template.context_processors import request
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from measurement.models import Sensor, Measurement
 from measurement.serializers import SensorSerializer, MeasurementSerializer, SensorDetailSerializer
 
 
-class ListCreateAPIView(APIView):
-    def get(self, request):
-        sensors = Sensor.objects.all()
-        return Response(SensorSerializer(sensors, many=True).data)
+class ListCreateAPIView(ListAPIView):
+    queryset = Sensor.objects.all()
+    serializer_class = SensorSerializer
 
     def post(self, request):
-        sensor_deserializer = SensorSerializer(data=request.data, many=False)
-        if sensor_deserializer.is_valid():
-            Sensor.objects.create(**sensor_deserializer.validated_data)
-            return Response({'Status': 'Successfully created'}, status=201)
-        return Response(sensor_deserializer.errors, status=400)
+        serializer = SensorSerializer(data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        sensor = Sensor.objects.create(**serializer.validated_data)
+        return Response(SensorSerializer(sensor).data, status=201)
 
 
-class RetrieveUpdateAPIView(APIView):
-    def get(self, request,pk):
-        sensor = Sensor.objects.all().filter(pk=pk).prefetch_related('measurements')
-        serialized = SensorDetailSerializer(sensor, many=True)
-        return Response(serialized.data)
+class RetrieveUpdateAPIView(RetrieveAPIView):
+    queryset = Sensor.objects.all().prefetch_related('measurements')
+    serializer_class = SensorDetailSerializer
+
     def patch(self, request, pk):
-        sensor = Sensor.objects.get(pk=pk)
-        sensor.description = request.data.get('description')
+        sensor = self.queryset.get(pk=pk)
+        serializer = SensorDetailSerializer(sensor, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        sensor.description = request.data['description']
         sensor.save()
-        return Response({'Status': 'Successfully updated'}, status=200)
+        return Response(SensorSerializer(sensor).data, status=200)
 
 
 class CreateAPIView(APIView):
     def post(self, request):
-        measurement = MeasurementSerializer(data=request.data, many=False)
-        if measurement.is_valid():
-            sensor = Sensor.objects.get(pk=measurement.validated_data.get('sensor'))
-            temperature = measurement.validated_data.get('temperature')
-            measurement_obj = Measurement.objects.create(sensor=sensor, temperature=temperature)
-            return Response({'Status': 'Successfully created', 'id': measurement_obj.id}, status=201)
-        return Response(measurement.errors, status=400)
-
+        serializer = MeasurementSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_measurement = Measurement.objects.create(**serializer.validated_data)
+        return Response(MeasurementSerializer(new_measurement).data, status=201)

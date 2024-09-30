@@ -1,25 +1,30 @@
 from rest_framework import serializers
-
-from measurement.models import Sensor
-
-
-# TODO: опишите необходимые сериализаторы
-class SensorSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    description = serializers.CharField()
+from measurement.models import Sensor, Measurement
 
 
-class MeasurementSerializer(serializers.Serializer):
-    sensor = serializers.PrimaryKeyRelatedField(read_only=True, many=False)
-    temperature = serializers.FloatField()
-    measured_at = serializers.DateTimeField(read_only=True, required=False)
-
-
-class SensorDetailSerializer(serializers.ModelSerializer):
-    measurements = MeasurementSerializer(read_only=True, many=True)
+class SensorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sensor
-        fields = '__all__'
+        fields = ['id', 'name', 'description']
+        required_fields = ['name', 'description']
+
+
+class MeasurementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Measurement
+        fields = ['sensor', 'temperature', 'measured_at']
+        write_only_fields = ['sensor', 'temperature']
+        required_fields = ['sensor', 'temperature']
+
+
+
+class SensorDetailSerializer(serializers.ModelSerializer):
+    measurements = MeasurementSerializer(many=True)
+
+    class Meta:
+        model = Sensor
+        fields = ['id', 'name', 'description', 'measurements']
+        required_fields = ['name', 'description']
 
