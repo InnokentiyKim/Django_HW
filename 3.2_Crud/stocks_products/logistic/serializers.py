@@ -37,7 +37,7 @@ class StockSerializer(serializers.ModelSerializer):
         # с помощью списка positions
 
         for position in positions:
-            StockProduct.objects.create(stock=stock, **position)
+            StockProduct.objects.update_or_create(stock=stock, **position)
 
         return stock
 
@@ -52,6 +52,6 @@ class StockSerializer(serializers.ModelSerializer):
         # в нашем случае: таблицу StockProduct
         # с помощью списка positions
         for position in positions:
-            StockProduct.objects.create(stock=stock, **position)
+            StockProduct.objects.update_or_create(stock=stock, **position)
 
         return stock
