@@ -13,7 +13,7 @@ class ProductViewSet(ModelViewSet):
 
 
 class StockViewSet(ModelViewSet):
-    queryset = Stock.objects.all().prefetch_related('products')
+    queryset = Stock.objects.all()
     serializer_class = StockSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['products']
