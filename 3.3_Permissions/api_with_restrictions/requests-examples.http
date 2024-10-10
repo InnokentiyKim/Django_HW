@@ -8,6 +8,12 @@ Content-Type: application/json
 
 ###
 
+# получение объявления
+GET {{baseUrl}}/advertisements/1/
+Content-Type: application/json
+
+###
+
 # создание объявления
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
@@ -31,8 +37,15 @@ Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
 
 ###
 
+DELETE {{baseUrl}}/advertisements/3/
+Content-Type: application/json
+Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
+
+
+###
+
 # фильтрация по создателю
-GET {{baseUrl}}/advertisements/?creator=3
+GET {{baseUrl}}/advertisements/?creator=1
 Content-Type: application/json
 
 ###

@@ -92,7 +92,6 @@ REST_FRAMEWORK = {
         'user': '20/minute',
         'anon': '10/minute',
     },
-
 }
 
 WSGI_APPLICATION = 'api_with_restrictions.wsgi.application'
