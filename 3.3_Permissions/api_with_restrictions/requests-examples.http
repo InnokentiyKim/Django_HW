@@ -6,6 +6,7 @@
 GET {{baseUrl}}/advertisements/
 Content-Type: application/json
 
+
 ###
 
 # получение объявления
@@ -17,7 +18,7 @@ Content-Type: application/json
 # создание объявления
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
-Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
+Authorization: Token 651b7727a1abe8c40fff7b84b310b1e078f64971
 
 {
   "title": "Шкаф IKEA",
@@ -37,7 +38,7 @@ Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
 
 ###
 
-DELETE {{baseUrl}}/advertisements/3/
+DELETE {{baseUrl}}/advertisements/1/
 Content-Type: application/json
 Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
 
@@ -52,4 +53,10 @@ Content-Type: application/json
 
 # фильтрация по дате
 GET {{baseUrl}}/advertisements/?created_at_before=2020-10-01
+Content-Type: application/json
+
+###
+
+# фильтрация по статусу
+GET {{baseUrl}}/advertisements/?status=CLOSED
 Content-Type: application/json

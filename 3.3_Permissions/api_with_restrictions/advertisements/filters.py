@@ -6,11 +6,10 @@ from advertisements.models import Advertisement, AdvertisementStatusChoices
 class AdvertisementFilter(filters.FilterSet):
     """Фильтры для объявлений."""
 
-    # TODO: задайте требуемые фильтры
-    created_at_before = filters.DateTimeFilter(field_name='created_at', lookup_expr='gt')
-    created_at_after = filters.DateTimeFilter(field_name='created_at', lookup_expr='lt')
-    creator = filters.ModelChoiceFilter(queryset=User.objects.all(), field_name='creator__username')
-    status = filters.ChoiceFilter(field_name='status', choices=AdvertisementStatusChoices.choices)
+    created_at = filters.DateTimeFromToRangeFilter(field_name="created_at", label="created_at")
+    creator = filters.ModelChoiceFilter(queryset=User.objects.all(), field_name="creator", label="creator")
+    status = filters.ChoiceFilter(field_name="status", choices=AdvertisementStatusChoices.choices, label="status")
+
 
     class Meta:
         model = Advertisement
