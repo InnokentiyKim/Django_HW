@@ -29,3 +29,10 @@ class Advertisement(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True
     )
+
+
+class Favourite(models.Model):
+    """Избранное"""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favourites')
+    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name='favourites')
+    unique_favourite = models.UniqueConstraint(fields=['user', 'advertisement'], name='unique_favourite')

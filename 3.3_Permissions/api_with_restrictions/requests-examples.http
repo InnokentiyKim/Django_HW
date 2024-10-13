@@ -60,3 +60,25 @@ Content-Type: application/json
 # фильтрация по статусу
 GET {{baseUrl}}/advertisements/?status=CLOSED
 Content-Type: application/json
+
+###
+
+# добавление в избранное
+POST {{baseUrl}}/advertisements/1/favourite/
+Content-Type: application/json
+Authorization: Token 651b7727a1abe8c40fff7b84b310b1e078f64971
+
+###
+
+# получение избранных объявлений
+GET {{baseUrl}}/advertisements/favourites/
+Content-Type: application/json
+Authorization: Token 651b7727a1abe8c40fff7b84b310b1e078f64971
+
+###
+
+# удаление объявления из избранного
+DELETE {{baseUrl}}/advertisements/1/favourite/
+Content-Type: application/json
+Authorization: Token 651b7727a1abe8c40fff7b84b310b1e078f64971
+

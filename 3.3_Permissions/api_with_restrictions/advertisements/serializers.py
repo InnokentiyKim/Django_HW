@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from api_with_restrictions.settings import OPEN_ADV_LIMIT
-from advertisements.models import AdvertisementStatusChoices
+from advertisements.models import AdvertisementStatusChoices, Favourite
 from advertisements.models import Advertisement
 
 
@@ -41,4 +41,21 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             )
             if open_adv_count >= OPEN_ADV_LIMIT:
                 raise serializers.ValidationError(f"Can't create more than {OPEN_ADV_LIMIT} open advertisements")
+        return data
+
+
+class FavouriteSerializer(serializers.ModelSerializer):
+    """Serializer для избранного."""
+    user = UserSerializer(read_only=True)
+    advertisement = AdvertisementSerializer(read_only=True)
+
+    class Meta:
+        model = Advertisement
+        fields = ('user', 'advertisement', )
+
+    def validate(self, data):
+        if data.get("user") == data.get("advertisement").creator:
+            raise serializers.ValidationError("User can't be creator")
+        if Favourite.objects.filter(user=data.get("user"), advertisement=data.get("advertisement")).exists():
+            raise serializers.ValidationError("Already in favourites")
         return data
