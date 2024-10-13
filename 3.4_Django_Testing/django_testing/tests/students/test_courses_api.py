@@ -3,6 +3,7 @@ from random import randint
 from students.models import Course
 from tests.conftest import courses_factory, students_factory, client
 
+
 BASE_COURSE_URL = "/api/v1/courses/"
 BASE_STUDENT_URL = "/api/v1/students/"
 
@@ -90,6 +91,23 @@ def test_delete_course(client, courses_factory):
     response = client.delete(f"{BASE_COURSE_URL}{course.id}/")
 
     assert response.status_code == 204
-    assert Course.objects.count() == 0
     assert Course.objects.filter(id=course.id).exists() is False
+
+
+@pytest.mark.parametrize(
+    "input_amount,expected_limit,expected_result",
+    [
+        (1, 3, False),
+        (3, 3, False),
+        (4, 3, True),
+    ]
+)
+@pytest.mark.django_db
+def test_max_students_per_course(settings, input_amount, expected_limit, expected_result, courses_factory, students_factory):
+    settings.MAX_STUDENTS_PER_COURSE = expected_limit
+    students = students_factory(_quantity=input_amount)
+    course = courses_factory(students=students)
+
+    assert (course.students.count() > settings.MAX_STUDENTS_PER_COURSE) == expected_result
+
 

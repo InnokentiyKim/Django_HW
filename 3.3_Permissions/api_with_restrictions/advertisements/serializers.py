@@ -59,3 +59,4 @@ class FavouriteSerializer(serializers.ModelSerializer):
         if Favourite.objects.filter(user=data.get("user"), advertisement=data.get("advertisement")).exists():
             raise serializers.ValidationError("Already in favourites")
         return data
+
