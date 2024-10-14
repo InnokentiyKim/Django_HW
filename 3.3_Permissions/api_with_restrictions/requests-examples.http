@@ -66,7 +66,7 @@ Content-Type: application/json
 # добавление в избранное
 POST {{baseUrl}}/advertisements/1/favourite/
 Content-Type: application/json
-Authorization: Token 651b7727a1abe8c40fff7b84b310b1e078f64971
+Authorization: Token 10497ffb2f50f99aeabfa0ee4c50a80341696f43
 
 ###
 

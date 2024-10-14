@@ -43,20 +43,3 @@ class AdvertisementSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(f"Can't create more than {OPEN_ADV_LIMIT} open advertisements")
         return data
 
-
-class FavouriteSerializer(serializers.ModelSerializer):
-    """Serializer для избранного."""
-    user = UserSerializer(read_only=True)
-    advertisement = AdvertisementSerializer(read_only=True)
-
-    class Meta:
-        model = Advertisement
-        fields = ('user', 'advertisement', )
-
-    def validate(self, data):
-        if data.get("user") == data.get("advertisement").creator:
-            raise serializers.ValidationError("User can't be creator")
-        if Favourite.objects.filter(user=data.get("user"), advertisement=data.get("advertisement")).exists():
-            raise serializers.ValidationError("Already in favourites")
-        return data
-

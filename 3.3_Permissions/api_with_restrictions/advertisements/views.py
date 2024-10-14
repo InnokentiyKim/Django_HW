@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
 from advertisements.models import Advertisement, Favourite
 from advertisements.permissions import IsOwnerOrReadOnly
-from advertisements.serializers import AdvertisementSerializer, FavouriteSerializer
+from advertisements.serializers import AdvertisementSerializer
 from .permissions import IsOwnerOrIsAdmin
 from .filters import AdvertisementFilter
 
